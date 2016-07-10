@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/samuel/CG/branch trab/Animation.hpp
+stdlib.h
+-
+Moviment.hpp
+/home/samuel/CG/branch trab/Moviment.hpp
+
+/home/samuel/CG/branch trab/Drawer.hpp
+GL/gl.h
+-
+GL/glut.h
+-
+Animation.hpp
+/home/samuel/CG/branch trab/Animation.hpp
+
+/home/samuel/CG/branch trab/Moviment.hpp
+
+/home/samuel/CG/branch trab/main.cpp
+GL/gl.h
+-
+GL/glut.h
+-
+iostream
+-
+stdlib.h
+-
+Drawer.hpp
+/home/samuel/CG/branch trab/Drawer.hpp
+
