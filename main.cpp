@@ -2,26 +2,66 @@
 #include <GL/glut.h>
 #include <iostream>
 #include <stdlib.h>
-// #include "Moviment2.hpp"
-// #include "Animation.hpp"
 #include "Drawer.hpp"
 using namespace Moviments;
 using namespace Animations;
 using namespace std;
-
 GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat mat_shininess[] = { 25.0 };
 GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
 GLfloat angle = 60, fAspect;
 int rotate = 0.0;
-int rotateControl=0;
+int rotate2=0.0;
+// int rotateControl=0;
 float desX=0;
+float deltaAngle;
 float xPosition=0;
 int camera=1;
 int perspective=1;
+int mousecontrolcamera=0;
+int mousex,mousey;
+int mousexant,mouseyant;
 Animation doll(12);
 Drawer body;
+void mousePos(int x, int y)
+{
 
+mousex = x;
+mousey = y;
+if(mousecontrolcamera){
+    cout<<"entrou";
+        if(mousexant<mousex)
+        rotate=(rotate+ 1)%360;
+        else{
+            rotate=(rotate-1)%360;
+        }
+        if(mouseyant>mousey)
+        rotate2=(rotate2+ 1)%360;
+        else{
+            rotate2=(rotate2-1)%360;
+        }
+        glutPostRedisplay();
+}
+// cout<<mousex<<","<<mousey<<endl;
+// cout<<righbutton<<endl;
+mousexant=x;
+mouseyant=y;
+}
+void Mouse (int button, int state, int x, int y)
+{
+
+    // if (state == GLUT_DOWN && button==2){
+    //
+    //     cout<<"entrou"<<endl;
+    //     // glutPostRedisplay();
+    //     // rotate=rotate+10;
+    //     righbutton=1;
+    // }
+    //
+    // if (state == GLUT_UP && button==2)
+    //     righbutton=0;
+    //     // printf(">>> Botao %d liberado\n",button);
+}
 void init(void)
 {
     doll.get_moviment(1)->set_moviment(0,0.0,0.0,
@@ -104,16 +144,15 @@ void init(void)
    glEnable(GL_LIGHTING);
    glEnable(GL_LIGHT0);
    glEnable(GL_DEPTH_TEST);
+    glShadeModel (GL_SMOOTH);
 }
 
 void Draw(void){
 
     //Ilumination
-    glShadeModel (GL_SMOOTH);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
     glEnable(GL_COLOR_MATERIAL);
     glClear (GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_PROJECTION);
@@ -127,6 +166,7 @@ void Draw(void){
     glLoadIdentity();
     switch (camera) {
         case 1:
+
             gluLookAt(0,0,10,
                       0,-0,0,
                       0,1,0);
@@ -150,9 +190,11 @@ void Draw(void){
        xPosition=doll.get_moviment()->tx +desX*0.2;
        glTranslated(xPosition,0,0);
        glRotated(rotate,0,-1.0,0.0);
+       glRotated(rotate2,0,0.0,1.0);
        glTranslated(-xPosition,0,0);
    }else{
        glRotated(rotate,0,-1.0,0.0);
+         glRotated(rotate2,0,0.0,1.0);
    }
     glColor3f(0.5, 0.5,0.5);
     glPushMatrix();
@@ -185,6 +227,9 @@ void Timer(int value)
 
 void Keyboard(unsigned char key, int x, int y)
 {
+    if(key=='m'){
+  mousecontrolcamera=!mousecontrolcamera;
+}
    if(key=='0'){
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
@@ -266,6 +311,9 @@ int main(int argc, char** argv)
 
     glutKeyboardFunc(Keyboard);
 
+
+    glutPassiveMotionFunc( mousePos );
+    // glutMouseFunc (Mouse);
 
     init();
 
